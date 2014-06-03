@@ -65,7 +65,7 @@ get_gaeval_files()
 
   get_file 53ca951a85b9b337347e937e966c0919 p1.2.makeralign.gaeval.txt
   get_file 75c1de85e40ac986980cf07d1a756bf7 p1.2.prealign.gaeval.txt
-  get_file 3e231398e5181d70a549ccd80a85a7a2 r1.1.gaeval.txt
+  get_file a87adf2ee24ad29d1518d7890a4eb2e4 r1.1.gaeval.txt
 
   cd ..
 
@@ -139,8 +139,9 @@ main()
   get_annot_files
   get_gaeval_files
 
-  combine_data r11 p12a "20e62162c1acc35a31d1337ccf6ecb74"
-  combine_data r11 p12b "250434c21a8fd760d8080cc2e57cc4c9"
+  combine_data r11 p12a "5002e0cbf276b2d86baddf283700db78"
+  combine_data r11 p12b "3099783ecb1047cc4f8e7d55111e7885"
+  bin/plot.R
 }
 
 # Actually run the main procedure
