@@ -8,6 +8,19 @@ p12a <- r11_v_p12a[r11_v_p12a$Version == "p12a",]
 r11b <- r11_v_p12b[r11_v_p12b$Version == "r11" ,]
 p12b <- r11_v_p12b[r11_v_p12b$Version == "p12b",]
 
+png("aed-int-corr-r11.png", width=1200, height=1200, res=150)
+plot(r11a$AED, r11a$Integrity, main="", xlab="Annotation Edit Distance (Maker)",
+     ylab="Integrity (GAEVAL)", col="blue")
+d <- dev.off()
+png("aed-int-corr-p12a.png", width=1200, height=1200, res=150)
+plot(p12a$AED, p12a$Integrity, main="", xlab="Annotation Edit Distance (Maker)",
+     ylab="Integrity (GAEVAL)", col="red")
+d <- dev.off()
+png("aed-int-corr-p12b.png", width=1200, height=1200, res=150)
+plot(p12b$AED, p12b$Integrity, main="", xlab="Annotation Edit Distance (Maker)",
+     ylab="Integrity (GAEVAL)", col="#009900")
+d <- dev.off()
+
 r11.aed.h <- hist(r11a$AED, plot=FALSE, breaks=20)
 r11.snap.aed.h <- hist(r11a$AED[r11a$AbInit == "snap"], plot=FALSE, breaks=20)
 p12a.aed.h <- hist(p12a$AED, plot=FALSE, breaks=20)
@@ -24,6 +37,7 @@ lines(p12b.snap.aed.h$mids, p12b.snap.aed.h$counts, col="#009900", lty=2)
 lines(r11.aed.h$mids,      r11.aed.h$counts,      col="blue")
 lines(r11.snap.aed.h$mids, r11.snap.aed.h$counts, col="blue", lty=2)
 d <- dev.off()
+
 
 r11a.uniq.aed.h <- hist(r11a$AED[r11a$Unique == "yes"], plot=FALSE, breaks=20)
 r11a.uniq.snap.aed.h <- hist(r11a$AED[r11a$Unique == "yes" & r11a$AbInit == "snap"], plot=FALSE, breaks=20)
