@@ -1,6 +1,13 @@
 #!/usr/bin/env perl
 use strict;
 
+# Input: ParsEval output (text format)
+# Output: For each gene that belongs to an unmatched locus, two tab-delimited
+#         values: source (reference or prediction; see ParsEval), gene ID
+#
+# Here, 'unmatched locus' means a locus that contains only reference genes or
+# only prediction genes.
+
 while(my $line = <STDIN>)
 {
   next unless($line =~ m/\|---- Locus:/);

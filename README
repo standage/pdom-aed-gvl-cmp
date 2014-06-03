@@ -1,5 +1,11 @@
 #!/usr/bin/env bash
 
+# Copyright (c) 2014
+# Daniel Standage <daniel.standage@gmail.com>
+#
+# Using this procedure to examine the quality (as measured by Maker and GAEVAL)
+# of several whole-genome annotations for Polistes dominula.
+
 check_prereqs()
 {
   which parseval > /dev/null 2>&1

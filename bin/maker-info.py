@@ -1,5 +1,12 @@
 #!/usr/bin/env python
 import re, sys
+"""
+Input:  Maker-formatted GFF3
+Output: For each mRNA, 5 tab-delimited values: label (give on command line),
+        mRNA ID, gene ID, ab initio source, annotation edit distance
+Usage:  ./maker-info.py v1 < maker-v1.gff3 >> annot-info.txt
+        ./maker-info.py v2 < maker-v2.gff3 >> annot-info.txt
+"""
 
 def abinit_check(id):
   for abinit in ["augustus", "snap", "genemark", "Pd"]:
