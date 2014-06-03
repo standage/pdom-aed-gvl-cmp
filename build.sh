@@ -2,9 +2,6 @@
 
 # Copyright (c) 2014
 # Daniel Standage <daniel.standage@gmail.com>
-#
-# Using this procedure to examine the quality (as measured by Maker and GAEVAL)
-# of several whole-genome annotations for Polistes dominula.
 
 check_prereqs()
 {
@@ -49,38 +46,13 @@ get_annot_files()
 
   get_file 963f501b27a0bc1444406c1f0ee3cbcd pdom-annot-p1.2-makeralign.gff3
   get_file 7bea6d65d9d6f0de79d942eff2a09717 pdom-annot-p1.2-prealign.gff3
-  get_file 6a0471e77b6448e4202ec2cfb7ed5dfd pdom-annot-r1.1.gff3
+  get_file b3f138e76d828f652d7c58c6a81ebdf4 pdom-annot-r1.1.gff3
 
   cd ..
 
-  # Rename for brevity's sake
   ln -s scratch/pdom-annot-p1.2-makeralign.gff3 p12b.gff3
-  ln -s scratch/pdom-annot-p1.2-prealign.gff3 p12a.gff3
-  ln -s scratch/pdom-annot-r1.1.gff3 r11.gff3
-
-  # Determine loci unique to each annotation
-  echo -n "Determining unique loci..."
-  parseval -o scratch/r11-v-p12a.psvl -w    \
-      <(grep -v $'UTR\t' r11.gff3)  \
-      <(grep -v $'UTR\t' p12a.gff3) \
-      2> scratch/r11-v-p12a.psvl.log
-  if [ ! -s scratch/r11-v-p12a.psvl ]; then
-    echo "ParsEval failed for r11-v-p12a.psvl"
-    tail -n 15 scratch/r11-v-p12a.psvl.log
-    exit 1
-  fi
-  parseval -o scratch/r11-v-p12b.psvl -w    \
-      <(grep -v $'UTR\t' r11.gff3)  \
-      <(grep -v $'UTR\t' p12b.gff3) \
-      2> scratch/r11-v-p12b.psvl.log
-  if [ ! -s scratch/r11-v-p12b.psvl ]; then
-    echo "ParsEval failed for r11-v-p12b.psvl"
-    tail -n 15 scratch/r11-v-p12b.psvl.log
-    exit 1
-  fi
-  bin/uniq.pl < scratch/r11-v-p12a.psvl > scratch/r11-v-p12a.uniq.txt
-  bin/uniq.pl < scratch/r11-v-p12b.psvl > scratch/r11-v-p12b.uniq.txt
-  echo 'done!'
+  ln -s scratch/pdom-annot-p1.2-prealign.gff3   p12a.gff3
+  ln -s scratch/pdom-annot-r1.1.gff3            r11.gff3
 }
 
 get_gaeval_files()
@@ -99,8 +71,8 @@ get_gaeval_files()
 
   # Rename for brevity's sake
   ln -s scratch/p1.2.makeralign.gaeval.txt p12b.gaeval.txt
-  ln -s scratch/p1.2.prealign.gaeval.txt p12a.gaeval.txt
-  ln -s scratch/r1.1.gaeval.txt r11.gaeval.txt
+  ln -s scratch/p1.2.prealign.gaeval.txt   p12a.gaeval.txt
+  ln -s scratch/r1.1.gaeval.txt            r11.gaeval.txt
 }
 
 get_info()
@@ -110,11 +82,54 @@ get_info()
   local source=$3
 
   bin/unique-info.py \
-      <(egrep "^$source" ${uniq} | cut -f 2)       \
+      <(egrep "^$source" ${uniq} | cut -f 2)        \
       <(bin/maker-info.py ${annot} < ${annot}.gff3) \
       | sort -k2,2 \
       > scratch/${annot}.maker.txt
-  bin/gaeval-info.py < ${annot}.gaeval.txt | sort -k1,1 > scratch/${annot}.gvl.txt
+  bin/gaeval-info.py < ${annot}.gaeval.txt \
+      | sort -k1,1 \
+      > scratch/${annot}.gvl.txt
+}
+
+combine_data()
+{
+  local refr=$1
+  local pred=$2
+  local outmd5=$3
+  local cmp=${refr}-v-${pred}
+  local outfile=pdom-${cmp}.aed-gaeval.txt
+  
+  # Determine loci unique to each annotation
+  echo -n "Determining unique loci ($cmp)..."
+  parseval -o scratch/${cmp}.psvl -w    \
+      <(grep -v $'UTR\t' ${refr}.gff3)  \
+      <(grep -v $'UTR\t' ${pred}.gff3) \
+      2> scratch/${cmp}.psvl.log
+  if [ ! -s scratch/${cmp}.psvl ]; then
+    echo "ParsEval failed for ${cmp}.psvl"
+    tail -n 15 scratch/${cmp}.psvl.log
+    exit 1
+  fi
+  bin/uniq.pl < scratch/${cmp}.psvl > scratch/${cmp}.uniq.txt
+  echo 'done!'
+
+  echo -n "Combining data ($cmp)..."
+  get_info ${refr} scratch/${cmp}.uniq.txt refr
+  get_info ${pred} scratch/${cmp}.uniq.txt pred
+
+  echo $'Version\tID\tParent\tAbInit\tAED\tCoverage\tIntegrity\tUnique' \
+      > $outfile
+  paste scratch/${refr}.maker.txt scratch/${refr}.gvl.txt \
+      |  awk '{ print $1,$2,$3,$4,$5,$8,$9,$6 }' \
+      |  tr ' ' '\t' \
+      >> $outfile
+  paste scratch/${pred}.maker.txt scratch/${pred}.gvl.txt \
+      |  awk '{ print $1,$2,$3,$4,$5,$8,$9,$6 }' \
+      |  tr ' ' '\t' | sed $'s/\tPd\t/\tVIGA\t/' \
+      >> $outfile
+
+  md5_check $outfile $outmd5
+  echo 'done!'
 }
 
 # Define the main procedure
@@ -124,24 +139,8 @@ main()
   get_annot_files
   get_gaeval_files
 
-  get_info r11  scratch/r11-v-p12a.uniq.txt refr
-  get_info p12a scratch/r11-v-p12a.uniq.txt pred
-
-  local outfile="pdom-r11_vs_p12a.aed-gaeval.txt"
-  local outmd5="8f0bc18277da1b0a6d5e89cecfad2290"
-
-  echo "Version	ID	Parent	AbInit	AED	Coverage	Integrity	Unique" \
-      > $outfile
-  paste scratch/r11.maker.txt scratch/r11.gvl.txt \
-      |  awk '{ print $1,$2,$3,$4,$5,$8,$9,$6 }' \
-      |  tr ' ' '\t' \
-      >> $outfile
-  paste scratch/p12a.maker.txt scratch/p12a.gvl.txt \
-      |  awk '{ print $1,$2,$3,$4,$5,$8,$9,$6 }' \
-      |  tr ' ' '\t' | sed $'s/\tPd\t/\tVIGA\t/' \
-      >> $outfile
-
-  md5_check $outfile $outmd5
+  combine_data r11 p12a "20e62162c1acc35a31d1337ccf6ecb74"
+  combine_data r11 p12b "250434c21a8fd760d8080cc2e57cc4c9"
 }
 
 # Actually run the main procedure
