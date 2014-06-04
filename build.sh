@@ -52,9 +52,9 @@ get_annot_files()
 
   cd ..
 
-  ln -s scratch/pdom-annot-p1.2-makeralign.gff3 p12b.gff3
-  ln -s scratch/pdom-annot-p1.2-prealign.gff3   p12a.gff3
-  ln -s scratch/pdom-annot-r1.1.gff3            r11.gff3
+  test -e p12b.gff3 || ln -s scratch/pdom-annot-p1.2-makeralign.gff3 p12b.gff3
+  test -e p12a.gff3 || ln -s scratch/pdom-annot-p1.2-prealign.gff3   p12a.gff3
+  test -e r11.gff3  || ln -s scratch/pdom-annot-r1.1.gff3            r11.gff3
 }
 
 get_gaeval_files()
@@ -72,9 +72,9 @@ get_gaeval_files()
   cd ..
 
   # Rename for brevity's sake
-  ln -s scratch/p1.2.makeralign.gaeval.txt p12b.gaeval.txt
-  ln -s scratch/p1.2.prealign.gaeval.txt   p12a.gaeval.txt
-  ln -s scratch/r1.1.gaeval.txt            r11.gaeval.txt
+  test -e p12b.gaeval.txt || ln -s scratch/p1.2.makeralign.gaeval.txt p12b.gaeval.txt
+  test -e p12a.gaeval.txt || ln -s scratch/p1.2.prealign.gaeval.txt   p12a.gaeval.txt
+  test -e r11.gaeval.txt  || ln -s scratch/r1.1.gaeval.txt            r11.gaeval.txt
 }
 
 get_info()
