@@ -33,8 +33,10 @@ get_file()
   local filename=$2
 
   echo -n "Getting file $filename..."
-  curl --silent --remote-name "$baseurl/$filename.bz2"
-  bunzip2 ${filename}.bz2
+  if [ ! -e $filename ]; then
+    curl --silent --remote-name "$baseurl/$filename.bz2"
+    bunzip2 ${filename}.bz2
+  fi
   md5_check $filename $md5
   echo 'done!'
 }

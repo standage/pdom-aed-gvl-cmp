@@ -1,4 +1,4 @@
 scratch
 *.gaeval.txt
 *.gff3
-*.png
+viz/*.png

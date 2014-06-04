@@ -8,15 +8,15 @@ p12a <- r11_v_p12a[r11_v_p12a$Version == "p12a",]
 r11b <- r11_v_p12b[r11_v_p12b$Version == "r11" ,]
 p12b <- r11_v_p12b[r11_v_p12b$Version == "p12b",]
 
-png("aed-int-corr-r11.png", width=1200, height=1200, res=150)
+png("viz/aed-int-corr-r11.png", width=1200, height=1200, res=150)
 plot(r11a$AED, r11a$Integrity, main="", xlab="Annotation Edit Distance (Maker)",
      ylab="Integrity (GAEVAL)", col="blue")
 d <- dev.off()
-png("aed-int-corr-p12a.png", width=1200, height=1200, res=150)
+png("viz/aed-int-corr-p12a.png", width=1200, height=1200, res=150)
 plot(p12a$AED, p12a$Integrity, main="", xlab="Annotation Edit Distance (Maker)",
      ylab="Integrity (GAEVAL)", col="red")
 d <- dev.off()
-png("aed-int-corr-p12b.png", width=1200, height=1200, res=150)
+png("viz/aed-int-corr-p12b.png", width=1200, height=1200, res=150)
 plot(p12b$AED, p12b$Integrity, main="", xlab="Annotation Edit Distance (Maker)",
      ylab="Integrity (GAEVAL)", col="#009900")
 d <- dev.off()
@@ -28,7 +28,7 @@ p12a.snap.aed.h <- hist(p12a$AED[p12a$AbInit == "snap"], plot=FALSE, breaks=20)
 p12b.aed.h <- hist(p12b$AED, plot=FALSE, breaks=20)
 p12b.snap.aed.h <- hist(p12b$AED[p12b$AbInit == "snap"], plot=FALSE, breaks=20)
 
-png("aed-dist.png", width=1200, height=1200, res=150)
+png("viz/aed-dist.png", width=1200, height=1200, res=150)
 plot(p12a.aed.h$mids, p12a.aed.h$counts, type="l", col="red", main="",
      xlab="Annotation edit distance", ylab="mRNAs", ylim=c(0, 3300))
 lines(p12a.snap.aed.h$mids, p12a.snap.aed.h$counts, col="red", lty=2)
@@ -44,7 +44,7 @@ r11a.uniq.snap.aed.h <- hist(r11a$AED[r11a$Unique == "yes" & r11a$AbInit == "sna
 p12a.uniq.aed.h <- hist(p12a$AED[p12a$Unique == "yes"], plot=FALSE, breaks=20)
 p12a.uniq.snap.aed.h <- hist(p12a$AED[p12a$Unique == "yes" & p12a$AbInit == "snap"], plot=FALSE, breaks=20)
 
-png("aed-uniq-dist-r11-v-p12a.png", width=1200, height=1200, res=150)
+png("viz/aed-uniq-dist-r11-v-p12a.png", width=1200, height=1200, res=150)
 plot(p12a.uniq.aed.h$mids, p12a.uniq.aed.h$counts, type="l", col="red", main="",
      xlab="Annotation edit distance", ylab="mRNAs", ylim=c(0, 400))
 lines(p12a.uniq.snap.aed.h$mids, p12a.uniq.snap.aed.h$counts, col="red", lty=2)
@@ -57,7 +57,7 @@ r11b.uniq.snap.aed.h <- hist(r11b$AED[r11b$Unique == "yes" & r11b$AbInit == "sna
 p12b.uniq.aed.h <- hist(p12b$AED[p12b$Unique == "yes"], plot=FALSE, breaks=20)
 p12b.uniq.snap.aed.h <- hist(p12b$AED[p12b$Unique == "yes" & p12b$AbInit == "snap"], plot=FALSE, breaks=20)
 
-png("aed-uniq-dist-r11-v-p12b.png", width=1200, height=1200, res=150)
+png("viz/aed-uniq-dist-r11-v-p12b.png", width=1200, height=1200, res=150)
 plot(p12b.uniq.aed.h$mids, p12b.uniq.aed.h$counts, type="l", col="#009900", main="",
      xlab="Annotation edit distance", ylab="mRNAs", ylim=c(0, 400))
 lines(p12b.uniq.snap.aed.h$mids, p12b.uniq.snap.aed.h$counts, col="#009900", lty=2)
@@ -72,7 +72,7 @@ p12a.snap.int.h <- hist(p12a$Integrity[p12a$AbInit == "snap"], plot=FALSE, break
 p12b.int.h <- hist(p12b$Integrity, plot=FALSE, breaks=20)
 p12b.snap.int.h <- hist(p12b$Integrity[p12b$AbInit == "snap"], plot=FALSE, breaks=20)
 
-png("int-dist.png", width=1200, height=1200, res=150)
+png("viz/int-dist.png", width=1200, height=1200, res=150)
 plot(p12a.int.h$mids, p12a.int.h$counts, type="l", col="red", main="",
      xlab="Integrity score", ylab="mRNAs", ylim=c(0, 3300))
 lines(p12a.snap.int.h$mids, p12a.snap.int.h$counts, col="red", lty=2)
@@ -87,7 +87,7 @@ r11a.uniq.snap.int.h <- hist(r11a$Integrity[r11a$Unique == "yes" & r11a$AbInit =
 p12a.uniq.int.h <- hist(p12a$Integrity[p12a$Unique == "yes"], plot=FALSE, breaks=20)
 p12a.uniq.snap.int.h <- hist(p12a$Integrity[p12a$Unique == "yes" & p12a$AbInit == "snap"], plot=FALSE, breaks=20)
 
-png("int-uniq-dist-r11-v-p12a.png", width=1200, height=1200, res=150)
+png("viz/int-uniq-dist-r11-v-p12a.png", width=1200, height=1200, res=150)
 plot(p12a.uniq.int.h$mids, p12a.uniq.int.h$counts, type="l", col="red", main="",
      xlab="Integrity score", ylab="mRNAs", ylim=c(0, 2000))
 lines(p12a.uniq.snap.int.h$mids, p12a.uniq.snap.int.h$counts, col="red", lty=2)
@@ -100,7 +100,7 @@ r11b.uniq.snap.int.h <- hist(r11b$Integrity[r11b$Unique == "yes" & r11b$AbInit =
 p12b.uniq.int.h <- hist(p12b$Integrity[p12b$Unique == "yes"], plot=FALSE, breaks=20)
 p12b.uniq.snap.int.h <- hist(p12b$Integrity[p12b$Unique == "yes" & p12b$AbInit == "snap"], plot=FALSE, breaks=20)
 
-png("int-uniq-dist-r11-v-p12b.png", width=1200, height=1200, res=150)
+png("viz/int-uniq-dist-r11-v-p12b.png", width=1200, height=1200, res=150)
 plot(p12b.uniq.int.h$mids, p12b.uniq.int.h$counts, type="l", col="#009900", main="",
      xlab="Integrity score", ylab="mRNAs", ylim=c(0, 2000))
 lines(p12b.uniq.snap.int.h$mids, p12b.uniq.snap.int.h$counts, col="#009900", lty=2)
