@@ -2,8 +2,12 @@ Copyright (c) 2014
 Daniel Standage <daniel.standage@gmail.com>
 
 Using this procedure to examine the quality (as measured by Maker and GAEVAL)
-of several whole-genome annotations for Polistes dominula. Executing ./build.sh
-on a UNIX system will create two tab-delimited data files which can easily be
-examined with standard visualization and analysis tools available in (for
-example) R or Python.
+of several whole-genome annotations for Polistes dominula. Executing
 
+  ./build.sh
+
+on a UNIX system will create two tab-delimited data files containing Maker and
+GAEVAL quality scores and produce several visualizations of the distrutions of
+these scores. The data files produced by the build procedure can easily be
+examined in more detail with standard visualization and analysis tools available
+in (for example) R or Python.
