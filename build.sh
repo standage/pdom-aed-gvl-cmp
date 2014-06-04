@@ -32,7 +32,7 @@ get_file()
   local md5=$1
   local filename=$2
 
-  echo -n "Getting file $filename..."
+  echo -n "Getting file ($filename)..."
   if [ ! -e $filename ]; then
     curl --silent --remote-name "$baseurl/$filename.bz2"
     bunzip2 ${filename}.bz2
@@ -103,10 +103,12 @@ combine_data()
   
   # Determine loci unique to each annotation
   echo -n "Determining unique loci ($cmp)..."
-  parseval -o scratch/${cmp}.psvl -w    \
-      <(grep -v $'UTR\t' ${refr}.gff3)  \
-      <(grep -v $'UTR\t' ${pred}.gff3) \
-      2> scratch/${cmp}.psvl.log
+  if [ ! -s scratch/${cmp}.psvl ]; then
+    parseval -o scratch/${cmp}.psvl -w    \
+        <(grep -v $'UTR\t' ${refr}.gff3)  \
+        <(grep -v $'UTR\t' ${pred}.gff3) \
+        2> scratch/${cmp}.psvl.log
+  fi
   if [ ! -s scratch/${cmp}.psvl ]; then
     echo "ParsEval failed for ${cmp}.psvl"
     tail -n 15 scratch/${cmp}.psvl.log
@@ -143,7 +145,11 @@ main()
 
   combine_data r11 p12a "5002e0cbf276b2d86baddf283700db78"
   combine_data r11 p12b "3099783ecb1047cc4f8e7d55111e7885"
+
+  mkdir -p viz
+  echo -n "Generating visualizations..."
   bin/plot.R
+  echo 'done!'
 }
 
 # Actually run the main procedure
