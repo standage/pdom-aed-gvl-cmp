@@ -61,7 +61,7 @@ get_gaeval_files()
 {
   # MySQL query used on the xGDBvm instances to create the *.gaeval.txt files:
   # SELECT locus_id,transcript_ids,coverage,integrity FROM gseg_locus_annotation
-  
+
   mkdir -p scratch
   cd scratch
 
@@ -100,7 +100,7 @@ combine_data()
   local outmd5=$3
   local cmp=${refr}-v-${pred}
   local outfile=pdom-${cmp}.aed-gaeval.txt
-  
+
   # Determine loci unique to each annotation
   echo -n "Determining unique loci ($cmp)..."
   if [ ! -s scratch/${cmp}.psvl ]; then
@@ -148,7 +148,7 @@ main()
 
   mkdir -p viz
   echo -n "Generating visualizations..."
-  bin/plot.R
+  bin/plot.R > scratch/corr.txt
   echo 'done!'
 }
 

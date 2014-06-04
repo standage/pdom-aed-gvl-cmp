@@ -10,16 +10,19 @@ p12b <- r11_v_p12b[r11_v_p12b$Version == "p12b",]
 
 png("viz/aed-int-corr-r11.png", width=1200, height=1200, res=150)
 plot(r11a$AED, r11a$Integrity, main="", xlab="Annotation Edit Distance (Maker)",
-     ylab="Integrity (GAEVAL)", col="blue")
+     ylab="Integrity (GAEVAL)", col="blue", pch=20)
 d <- dev.off()
+cor.test(r11a$AED, r11a$Integrity)
 png("viz/aed-int-corr-p12a.png", width=1200, height=1200, res=150)
 plot(p12a$AED, p12a$Integrity, main="", xlab="Annotation Edit Distance (Maker)",
-     ylab="Integrity (GAEVAL)", col="red")
+     ylab="Integrity (GAEVAL)", col="red", pch=20)
 d <- dev.off()
+cor.test(p12a$AED, p12a$Integrity)
 png("viz/aed-int-corr-p12b.png", width=1200, height=1200, res=150)
 plot(p12b$AED, p12b$Integrity, main="", xlab="Annotation Edit Distance (Maker)",
-     ylab="Integrity (GAEVAL)", col="#009900")
+     ylab="Integrity (GAEVAL)", col="#009900", pch=20)
 d <- dev.off()
+cor.test(p12b$AED, p12b$Integrity)
 
 r11.aed.h <- hist(r11a$AED, plot=FALSE, breaks=20)
 r11.snap.aed.h <- hist(r11a$AED[r11a$AbInit == "snap"], plot=FALSE, breaks=20)
